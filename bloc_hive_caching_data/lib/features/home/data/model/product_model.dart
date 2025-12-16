@@ -1,10 +1,11 @@
-import 'package:bloc_hive_caching_data/features/home/data/model/hive_helper/fields/products_model_fields.dart';
-import 'package:bloc_hive_caching_data/features/home/data/model/hive_helper/hive_types.dart';
+import 'package:bloc_hive_caching_data/features/home/data/model/hive_helper/fields/products_fields.dart';
+import 'package:bloc_hive_caching_data/hive_helper/fields/products_model_fields.dart';
+import 'package:bloc_hive_caching_data/hive_helper/hive_types.dart';
 import 'package:hive/hive.dart';
 
 part 'product_model.g.dart';
 
-@HiveType(typeId: HiveTypes.productModel)
+@HiveType(typeId: HiveTypes.productsModel)
 class ProductsModel extends HiveObject {
   @HiveField(ProductsModelFields.success)
   final bool success;
@@ -40,14 +41,23 @@ class ProductsModel extends HiveObject {
   );
 }
 
-class Products {
+@HiveType(typeId: HiveTypes.products)
+class Products extends HiveObject {
+  @HiveField(ProductsFields.id)
   final int id;
+  @HiveField(ProductsFields.price)
   final double price;
+  @HiveField(ProductsFields.category)
   final String category;
+  @HiveField(ProductsFields.updatedAt)
   final String updatedAt;
+  @HiveField(ProductsFields.photoUrl)
   final String photoUrl;
+  @HiveField(ProductsFields.name)
   final String name;
+  @HiveField(ProductsFields.description)
   final String description;
+  @HiveField(ProductsFields.createdAt)
   final String createdAt;
 
   Products({

@@ -52,7 +52,14 @@ dev_dependencies:
 
 Follow initial steps from YT video to minute 5:00.
 
-Once model is converted to hive by the menu option **"[Hive] Convert To Hive"** and adding all HiveTypes and HiveFields, run bash command to generate
+Once model is converted to hive by the menu option **"[Hive] Convert To Hive"**, delete classes :
+
+- register_adapters.dart
+- hive_adapters.dart
+
+Then copy /hive_helper/ folder to /model/ where product_field.dart is.
+
+run bash command to generate
 
 ```sh
 flutter packages pub run build_runner build --delete-conflicting-outputs
