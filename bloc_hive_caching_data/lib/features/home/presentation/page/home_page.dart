@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
               return Center(
                 child: Text(
                   productsModel.message.toString(),
-                  style: theme.textTheme.headlineMedium,
+                  style: theme.textTheme.labelMedium,
                 ),
               );
             }

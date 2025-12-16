@@ -4,13 +4,15 @@ class InternetConnectionHelper {
   // Add methods to check internet connectivity using Dio and connectivity_plus
   Future<bool> checkInternetConnection() async {
     // Implementation for checking internet connection
-    var connectivityResult = await Connectivity().checkConnectivity();
 
-    if (connectivityResult == ConnectivityResult.none) {
+    final List<ConnectivityResult> connectivityResults = await Connectivity()
+        .checkConnectivity();
+
+    if (connectivityResults.contains(ConnectivityResult.none)) {
       return false; // Not connected to any network
-    } else if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi ||
-        connectivityResult == ConnectivityResult.vpn) {
+    } else if (connectivityResults.contains(ConnectivityResult.mobile) ||
+        connectivityResults.contains(ConnectivityResult.wifi) ||
+        connectivityResults.contains(ConnectivityResult.vpn)) {
       return true; // Connected to a network
     }
     return false; // Fallback case (not connected)

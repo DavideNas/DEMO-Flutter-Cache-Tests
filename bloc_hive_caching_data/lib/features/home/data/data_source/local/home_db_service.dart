@@ -36,6 +36,7 @@ class HomeDataBaseService implements InterfaceRepository<ProductsModel> {
       // Handle read errors
       logger.e('Error on getting All ProductsModel from DB : $e');
     }
+    return null;
   }
 
   @override

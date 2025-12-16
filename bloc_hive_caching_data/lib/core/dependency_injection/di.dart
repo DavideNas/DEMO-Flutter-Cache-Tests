@@ -2,6 +2,7 @@ import 'di_ex.dart';
 
 GetIt di = GetIt.instance;
 
+// Service Locator Setup
 Future<void> setupDi() async {
   // Network Services
   di.registerSingleton<Dio>(Dio());

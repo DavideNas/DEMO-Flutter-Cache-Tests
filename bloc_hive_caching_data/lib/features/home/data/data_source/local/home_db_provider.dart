@@ -11,6 +11,7 @@ class HomeDbProvider {
   // Read From DB
   Future<ProductsModel?> getProducts() async {
     try {
+      logger.i('Products fetched from DB successfully');
       return await _homeDatabaseService.getAll();
     } catch (e) {
       // Log or handle read errors
