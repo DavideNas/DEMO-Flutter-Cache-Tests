@@ -5,6 +5,7 @@ import 'package:bloc_hive_caching_data/core/utils/custom_alert.dart';
 import 'package:bloc_hive_caching_data/core/utils/custom_loading_widget.dart';
 import 'package:bloc_hive_caching_data/features/home/data/model/product_model.dart';
 import 'package:bloc_hive_caching_data/features/home/presentation/bloc/home_status.dart';
+import 'package:bloc_hive_caching_data/features/home/presentation/widget/bnb.dart';
 import 'package:bloc_hive_caching_data/features/home/presentation/widget/home_single_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      bottomNavigationBar: BNB(),
       body: SizedBox(
         height: height,
         width: width,
