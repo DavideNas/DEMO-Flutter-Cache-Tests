@@ -68,3 +68,5 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 > If give any error check compatibility packages with AI prompt ad rerun the command.
 
 Next steps from minute 6:49
+
+Continue from minute 30:28

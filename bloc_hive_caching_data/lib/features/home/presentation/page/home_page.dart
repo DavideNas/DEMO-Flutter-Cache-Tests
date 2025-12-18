@@ -1,9 +1,15 @@
+import 'package:bloc_hive_caching_data/core/dependency_injection/di.dart';
 import 'package:bloc_hive_caching_data/core/dependency_injection/di_ex.dart';
+import 'package:bloc_hive_caching_data/core/pages/error_page.dart';
+import 'package:bloc_hive_caching_data/core/utils/custom_alert.dart';
 import 'package:bloc_hive_caching_data/core/utils/custom_loading_widget.dart';
 import 'package:bloc_hive_caching_data/features/home/data/model/product_model.dart';
 import 'package:bloc_hive_caching_data/features/home/presentation/bloc/home_status.dart';
+import 'package:bloc_hive_caching_data/features/home/presentation/widget/home_single_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,6 +45,16 @@ class _HomePageState extends State<HomePage> {
         height: height,
         width: width,
         child: BlocConsumer<HomeBloc, HomeState>(
+          // build when
+          buildWhen: (previous, current) {
+            return previous.homeProductsStatus != current.homeProductsStatus;
+          },
+
+          // listen when
+          listenWhen: (previous, current) {
+            return previous.homeProductsStatus != current.homeProductsStatus;
+          },
+
           // builder
           builder: (BuildContext context, HomeState state) {
             // init State Status
@@ -57,12 +73,15 @@ class _HomePageState extends State<HomePage> {
 
               final String errorMsg = emPost.message;
 
-              return Center(
-                child: Text(
-                  errorMsg,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelMedium,
-                ),
+              return CommonErrorPage(
+                isForNetwork: true,
+                description: errorMsg,
+                onRetry: () {
+                  context.read<HomeBloc>().add(HomeCallProductsEvent());
+                  // BlocProvider.of<HomeBloc>(
+                  //   context,
+                  // ).add(HomeCallProductsEvent());
+                },
               );
             }
 
@@ -73,17 +92,47 @@ class _HomePageState extends State<HomePage> {
 
               final ProductsModel productsModel = cmProducts.products;
 
-              return Center(
-                child: Text(
-                  productsModel.message.toString(),
-                  style: theme.textTheme.labelMedium,
+              return LiquidPullToRefresh(
+                backgroundColor: theme.scaffoldBackgroundColor,
+                color: theme.primaryColor,
+                showChildOpacityTransition: true,
+                onRefresh: () async {
+                  BlocProvider.of<HomeBloc>(
+                    context,
+                  ).add(HomeCallProductsEvent());
+
+                  // with extension
+                  // context.read<HomeBloc>().add(HomeCallProductsEvent());
+                },
+                child: ListView.builder(
+                  itemCount: productsModel.products.length,
+                  itemBuilder: (context, index) {
+                    final Product current = productsModel.products[index];
+                    return HomeSingleListItem(current: current);
+                  },
                 ),
               );
             }
 
             return Container();
           },
-          listener: (BuildContext context, HomeState state) {},
+          // Listener
+          listener: (BuildContext context, HomeState state) async {
+            // Home Completed state
+            if (state.homeProductsStatus is HomeProductsStatusCompleted) {
+              final HomeProductsStatusCompleted cmProducts =
+                  state.homeProductsStatus as HomeProductsStatusCompleted;
+              final ProductsModel productsModel = cmProducts.products;
+              final bool isConnected = await di<InternetConnectionHelper>()
+                  .checkInternetConnection();
+
+              final String msg = isConnected
+                  ? "From Server 🌐"
+                  : "From Local Source 💾";
+
+              CustomAlert.show(context, productsModel.message + msg);
+            }
+          },
         ),
       ),
     );

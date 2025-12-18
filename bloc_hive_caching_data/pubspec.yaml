@@ -23,6 +23,9 @@ dependencies:
   remixicon: ^1.4.1
   iconly: ^1.0.1
 
+  # Refresh indicator
+  liquid_pull_to_refresh: ^3.0.1
+
   # Log
   logger: ^2.6.2
 

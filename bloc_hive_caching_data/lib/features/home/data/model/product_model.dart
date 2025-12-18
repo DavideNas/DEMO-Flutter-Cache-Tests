@@ -18,7 +18,7 @@ class ProductsModel extends HiveObject {
   @HiveField(ProductsModelFields.limit)
   final int limit;
   @HiveField(ProductsModelFields.products)
-  final List<Products> products;
+  final List<Product> products;
 
   ProductsModel({
     required this.success,
@@ -36,13 +36,13 @@ class ProductsModel extends HiveObject {
     offset: json['offset'],
     limit: json['limit'],
     products: (json['products'] as List)
-        .map((x) => Products.fromJson(x))
+        .map((x) => Product.fromJson(x))
         .toList(),
   );
 }
 
 @HiveType(typeId: HiveTypes.products)
-class Products extends HiveObject {
+class Product extends HiveObject {
   @HiveField(ProductsFields.id)
   final int id;
   @HiveField(ProductsFields.price)
@@ -60,7 +60,7 @@ class Products extends HiveObject {
   @HiveField(ProductsFields.createdAt)
   final String createdAt;
 
-  Products({
+  Product({
     required this.id,
     required this.price,
     required this.category,
@@ -71,7 +71,7 @@ class Products extends HiveObject {
     required this.createdAt,
   });
 
-  factory Products.fromJson(Map<String, dynamic> json) => Products(
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
     id: json['id'],
     price: json['price']?.toDouble(),
     category: json['category'].toString(),

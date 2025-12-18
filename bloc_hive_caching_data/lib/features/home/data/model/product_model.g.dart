@@ -22,7 +22,7 @@ class ProductsModelAdapter extends TypeAdapter<ProductsModel> {
       message: fields[2] as String,
       offset: fields[3] as int,
       limit: fields[4] as int,
-      products: (fields[5] as List).cast<Products>(),
+      products: (fields[5] as List).cast<Product>(),
     );
   }
 
@@ -55,17 +55,17 @@ class ProductsModelAdapter extends TypeAdapter<ProductsModel> {
           typeId == other.typeId;
 }
 
-class ProductsAdapter extends TypeAdapter<Products> {
+class ProductsAdapter extends TypeAdapter<Product> {
   @override
   final int typeId = 1;
 
   @override
-  Products read(BinaryReader reader) {
+  Product read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Products(
+    return Product(
       id: fields[0] as int,
       price: fields[1] as double,
       category: fields[2] as String,
@@ -78,7 +78,7 @@ class ProductsAdapter extends TypeAdapter<Products> {
   }
 
   @override
-  void write(BinaryWriter writer, Products obj) {
+  void write(BinaryWriter writer, Product obj) {
     writer
       ..writeByte(8)
       ..writeByte(0)

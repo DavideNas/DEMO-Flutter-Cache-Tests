@@ -2,8 +2,6 @@ part of 'home_bloc.dart';
 
 @immutable
 sealed class HomeEvent extends Equatable {
-  // Classes can only extend other classes.
-  // Try specifying a different superclass, or removing the extends clause
   const HomeEvent();
 
   @override
