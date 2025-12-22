@@ -47,7 +47,7 @@ class LocalDbHelper {
     return await db.query(
       "news",
       orderBy: "updatedAt DESC",
-      limit: 20,
+      limit: 100,
       offset: lastNo,
     );
   }

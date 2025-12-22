@@ -22,7 +22,7 @@ class _HomepageState extends State<Homepage> {
   int currentPage = 0;
 
   // GET ALL TIMES WITHIN PAGE WHERE SAVED TO DB
-  void getLastSavedTime() async {
+  Future<void> getLastSavedTime() async {
     var time = await LocalDbHelper.getSaveTime();
     setState(() {
       savedTime = time;
@@ -33,14 +33,15 @@ class _HomepageState extends State<Homepage> {
   void firstPageNews() async {
     int count = await LocalDbHelper.getNewsCount() ?? 0;
     console.log("Saved News count : $count");
-    DateTime currentPageSavedTime = DateTime.parse(
-      savedTime[0]["lastSavedTime"] ?? "2000-01-01",
-    );
-    console.log(currentPageSavedTime.toString());
+    int savedTimeLength = savedTime.length;
+    DateTime firstPageSavedTime = savedTimeLength >= 1
+        ? DateTime.parse(savedTime[0]["lastSavedTime"] ?? "2000-01-01")
+        : DateTime(2000);
+    console.log(firstPageSavedTime.toString());
 
     DateTime currentTime = DateTime.now();
-    Duration difference = currentTime.difference(currentPageSavedTime);
-    if (0 == count /*|| 5 < difference.inMinutes*/ ) {
+    Duration difference = currentTime.difference(firstPageSavedTime);
+    if (difference.inMinutes > 5 || 0 == count) {
       console.log("Fetching from API call");
       var isApifetching = await ApiNewsHelper.getLatestHAckerNews(currentPage);
       if (isApifetching) {
@@ -48,6 +49,32 @@ class _HomepageState extends State<Homepage> {
       }
     } else {
       getNews();
+    }
+  }
+
+  // NEXT PAGE NEWS
+  void nextPageNews() async {
+    int count = await LocalDbHelper.getNewsCount() ?? 0;
+    console.log("Saved News count : $count");
+    await getLastSavedTime();
+    int savedTimeLength = savedTime.length;
+    DateTime nextPageSavedTime = currentPage > savedTimeLength - 1
+        ? DateTime(2000)
+        : DateTime.parse(
+            savedTime[currentPage]["lastSavedTime"] ?? "2000-01-01",
+          );
+    console.log(nextPageSavedTime.toString());
+
+    DateTime currentTime = DateTime.now();
+    Duration difference = currentTime.difference(nextPageSavedTime);
+    if (difference.inMinutes > 5) {
+      console.log("Fetching from API call for $currentPage");
+      var isApifetching = await ApiNewsHelper.getLatestHAckerNews(currentPage);
+      if (isApifetching) {
+        getMoreNews();
+      }
+    } else {
+      getMoreNews();
     }
   }
 
@@ -62,7 +89,9 @@ class _HomepageState extends State<Homepage> {
 
   // FETCH MORE NEW FROM LOCAL DB
   void getMoreNews() async {
-    isMoreNewsLoading = true;
+    setState(() {
+      isMoreNewsLoading = true;
+    });
     var news = await LocalDbHelper.getMoreNews(latestNews.length);
     setState(() {
       latestNews.addAll(news.map((e) => HackerNewsModel.formJson(e)).toList());
@@ -75,7 +104,7 @@ class _HomepageState extends State<Homepage> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       currentPage++;
-      getMoreNews();
+      nextPageNews();
     }
   }
 
@@ -121,6 +150,7 @@ class _HomepageState extends State<Homepage> {
               onPressed: () {
                 getLastSavedTime();
                 firstPageNews();
+                currentPage = 0;
                 setState(() {
                   isLoading = true;
                 });
@@ -131,6 +161,7 @@ class _HomepageState extends State<Homepage> {
             FloatingActionButton(
               onPressed: () {
                 LocalDbHelper.deleteNewsTable();
+                LocalDbHelper.deleteSavedTimeTable();
                 setState(() {
                   latestNews = [];
                 });
@@ -141,7 +172,10 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
       bottomNavigationBar: isMoreNewsLoading
-          ? CircularProgressIndicator()
+          ? SizedBox(
+              height: 55,
+              child: Center(child: CircularProgressIndicator()),
+            )
           : null,
     );
   }
