@@ -1,0 +1,44 @@
+{
+
+  "name": "node_backend",
+
+  "version": "1.0.0",
+
+  "description": "A simple backend to expose leaderboard json data",
+
+  "main": "index.js",
+
+  "scripts": {
+
+    "start": "node index.js",
+	
+	"dev": "nodemon index.js"
+
+  },
+
+  "keywords": [
+
+    "leaderboard"
+
+  ],
+
+  "author": "brickpoint",
+
+  "license": "ISC",
+
+  "dependencies": {
+
+    "cors": "^2.8.5",
+
+    "express": "^5.2.1"
+
+  },
+
+  "devDependencies": {
+
+    "nodemon": "^3.1.11"
+
+  }
+
+}
+
