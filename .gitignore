@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/flutter,node,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=flutter,node,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,flutter,node
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,flutter,node
 
 ### Flutter ###
 # Flutter/Dart/Pub related
@@ -224,4 +224,4 @@ dist
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/flutter,node,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,flutter,node
