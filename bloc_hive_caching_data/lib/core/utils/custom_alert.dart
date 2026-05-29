@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CustomAlert {
   CustomAlert._();
 
-  static show(BuildContext context, String msg) {
+  static dynamic show(BuildContext context, String msg) {
     return showAlertBanner(
       context,
       () {},

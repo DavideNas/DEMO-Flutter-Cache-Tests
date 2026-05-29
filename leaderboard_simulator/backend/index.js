@@ -25,7 +25,7 @@ app.get("/api/data", (req, res) => {
     },
     {
       name: "Glaceon",
-      marks: 75,
+      marks: 60,
     },
   ];
   res.json(data);
